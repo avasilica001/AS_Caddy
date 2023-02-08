@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  cliente:
+    build: ./cliente
+    volumes: 
+      - ./paginaweb:/paginaweb
+
+  caddy:
+    build: ./caddy
+    ports:
+      - "80:2015"
+      - "443:443"
+    volumes:
+      - ./paginaweb:/srv
+    depends_on:
+      cliente:
+        condition: service_completed_successfully
+        
+  mysql:
+    build: ./mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./paginaweb:/paginaweb
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    depends_on:
+      cliente:
+        condition: service_completed_successfully
