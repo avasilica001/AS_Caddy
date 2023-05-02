@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: deploymentcaddy
+  labels:
+    app: app-caddy
+    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-caddy
+  template:
+    metadata:
+      labels:
+        app: app-caddy
+    spec:
+      containers:
+      - name: caddy
+        image: avasilica001/as_caddy
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+          - name: paginaweb
+            mountPath: /srv
+      volumes:
+      - name: paginaweb
+        persistentVolumeClaim:
+          claimName: paginawebclaim

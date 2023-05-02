@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: deploymentcliente
+  labels:
+    app: app-cliente
+    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-cliente
+  template:
+    metadata:
+      labels:
+        app: app-cliente
+    spec:
+      containers:
+      - name: cliente
+        image: avasilica001/as_cliente
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: paginaweb
+            mountPath: /paginaweb
+      volumes:
+      - name: paginaweb
+        persistentVolumeClaim:
+          claimName: paginawebclaim

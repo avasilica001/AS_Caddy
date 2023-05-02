@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: deploymentmysql
+  labels:
+    app: app-mysql
+    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-mysql
+  template:
+    metadata:
+      labels:
+        app: app-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: avasilica001/as_mysql
+        ports:
+        - containerPort: 3307
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: paginaweb
+            mountPath: /paginaweb
+      volumes:
+      - name: paginaweb
+        persistentVolumeClaim:
+          claimName: paginawebclaim
